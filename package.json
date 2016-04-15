@@ -1,0 +1,35 @@
+{
+  "name": "echo-bot",
+  "version": "0.1.0",
+  "description": "The most awesome echo-bot template.",
+  "main": "app.js",
+  "directories": {
+    "example": "examples"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/sourcelair-blueprints/echo-bot.git"
+  },
+  "keywords": [
+    "bot",
+    "echo",
+    "echo-bot",
+    "template",
+    "start",
+    "botframework",
+    "bot-framework"
+  ],
+  "author": "Antonis Kalipetis | SourceLair",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/sourcelair-blueprints/echo-bot/issues"
+  },
+  "homepage": "https://github.com/sourcelair-blueprints/echo-bot",
+  "dependencies": {
+    "botbuilder": "https://cf979153cd14525475d4-f860d1dda29fa1b9bcbf643d12472ae9.ssl.cf1.rackcdn.com/botbuilder_0.8.0.tar.gz",
+    "restify": "^4.0.4"
+  }
+}
