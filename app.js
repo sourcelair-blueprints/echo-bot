@@ -47,6 +47,6 @@ server.use(helloBot.verifyBotFramework(
     {appId: process.env.APP_ID, appSecret: process.env.APP_SECRET}));
 server.post('/v1/messages', helloBot.listen());
 
-server.listen(3000, function () {
+server.listen(process.env.PORT || 3000, function () {
     console.log('%s listening to %s', server.name, server.url);
 });
