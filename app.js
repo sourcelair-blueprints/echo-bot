@@ -1,3 +1,4 @@
+require('dotenv').config();
 var restify = require('restify');
 var builder = require('botbuilder');
 
@@ -43,7 +44,7 @@ helloBot.add('/help', [
 ]);
 
 server.use(helloBot.verifyBotFramework(
-    {appId: 'YOUR_APP_ID_HERE', appSecret: 'YOUR_SECRET_HERE'}));
+    {appId: process.env.APP_ID, appSecret: process.env.APP_SECRET}));
 server.post('/v1/messages', helloBot.listen());
 
 server.listen(3000, function () {
