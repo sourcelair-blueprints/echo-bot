@@ -1,8 +1,12 @@
 require('dotenv').config();
-var restify = require('restify');
 var builder = require('botbuilder');
+var jade = require('jade');
+var restify = require('restify');
 
 var server = restify.createServer();
+
+var iframeUrl = 'https://webchat.botframework.com/embed/' + process.env.APP_ID + '?s=' +
+    process.env.APP_IFRAME_SECRET;
 
 var helloBot = new builder.BotConnectorBot();
 helloBot.add('/', new builder.CommandDialog()
@@ -42,6 +46,14 @@ helloBot.add('/help', [
         session.endDialog();
     }
 ]);
+
+server.get('/', function indexHTML(req, res, next) {
+    res.setHeader('Content-Type', 'text/html');
+    res.writeHead(200);
+    res.end(
+        jade.renderFile('index.jade', {iframeUrl: iframeUrl}));
+    next();
+});
 
 server.use(helloBot.verifyBotFramework(
     {appId: process.env.APP_ID, appSecret: process.env.APP_SECRET}));
