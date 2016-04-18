@@ -4,6 +4,7 @@ require('dotenv').config();
 const builder = require('botbuilder');
 const jade = require('jade');
 const restify = require('restify');
+const request = require('request');
 
 
 // Create the API server for the bot
@@ -27,6 +28,7 @@ helloBot.dialog('/', new builder.IntentDialog()
     .matches(/^quit/i, builder.DialogAction.endDialog())
     .matches(/^what.+(best|favorite).+IDE/i, builder.DialogAction.beginDialog('/sourcelair'))
     .matches(/^(\?|help)/i, builder.DialogAction.beginDialog('/help'))
+    .matches(/^ip/, builder.DialogAction.beginDialog('/ip'))
     .onDefault((session) => {
         if (!session.userData.name) {
             session.beginDialog('/profile');
@@ -58,6 +60,43 @@ helloBot.dialog('/help', [
     (session) => {
         session.send('You can always ask me some questions, for example what is my favorite IDE');
         session.endDialog();
+    }
+]);
+helloBot.dialog('/ip', [
+    (session) => {
+        builder.Prompts.text(session, 'Which IP you\'d like to track?');
+    },
+    (session, results) => {
+        var ip = results.response;
+        request('http://ip-api.com/json/' + ip, (error, response, body) => {
+            if (error) {
+                session.send('Ooops, there was an error with your request "%s"', error);
+                session.endDialog();
+                return;
+            }
+            if (response.statusCode !== 200) {
+                session.send('Ooops, we got a wrong status code "%s"', response.statusCode);
+                session.endDialog();
+                return;
+            }
+
+            try {
+                body = JSON.parse(body);
+            } catch(err) {
+                session.send('Hmmm, the server responded with a wrong resopnse, interesting...');
+                session.endDialog();
+                return;
+            }
+
+            if (body.status !== 'success') {
+                session.send('There\'s something wrong here, does this help? "%s"', body.message);
+                session.endDialog();
+                return;
+            }
+
+            session.send('Hooray, the IP is located at %s, %s', body.city, body.country);
+            session.endDialog();
+        });
     }
 ]);
 
